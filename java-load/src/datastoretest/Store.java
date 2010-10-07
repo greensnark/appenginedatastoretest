@@ -10,10 +10,10 @@ public class Store {
     new HashMap<String, Integer>();
 
   public static final int INSERT_BATCH_SIZE = 500;
-  public static final int INSERT_TRIALS = 20;
+  public static final int INSERT_TRIALS = 10;
 
   public static final int QUERY_BATCH_SIZE = 1000;
-  public static final int QUERY_TRIALS = 20;
+  public static final int QUERY_TRIALS = 5;
 
   private Random random = new Random();
 

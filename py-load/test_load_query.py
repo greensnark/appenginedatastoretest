@@ -30,10 +30,10 @@ MODEL_FIELDS = { 'firstname': 8,
                  'zip': 5 }
 
 INSERT_BATCH_SIZE = 500
-INSERT_TRIALS = 20
+INSERT_TRIALS = 10
 
 QUERY_BATCH_SIZE = 1000
-QUERY_TRIALS = 10
+QUERY_TRIALS = 5
 
 def timedelta_millis(delta):
   return (delta.days * 24 * 60 * 60 * 1000 + delta.seconds * 1000
