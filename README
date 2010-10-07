@@ -35,11 +35,27 @@ Java SDK, edit WEB-INF/appengine-web.xml and point the application at
 the app you want to deploy to, then run `ant && appcfg.sh update war`
 
 
+Testing the app
+---------------
+
+Assuming you've used an appname of 'dsqueryspeed' (insert your app name
+here), you can access the two versions at:
+
+Python:
+http://2.latest.dsqueryspeed.appspot.com/
+
+Java:
+http://1.latest.dsqueryspeed.appspot.com/
+
+Note that both apps share the same datastore, so the query test is
+querying exactly the same query on exactly the same datastore.
+
+
 Inserting Records
 -----------------
 
 The Python app's landing page has a button to insert 2k records of an
-entity that looks like this (no fields indexed):
+entity that looks like this (*no* fields indexed):
 
 Person
 ======
@@ -53,3 +69,8 @@ zip (5)
 I recognize this is a toy model; the intent is merely to compare the
 relative performance of Java and Python for medium-large datastore
 queries.
+
+To avoid DeadlineExceededErrors, the Python app uses a deferred task
+to insert records in batches until it's done inserting 2k records. You
+may refresh /insert_status to check if the app is still busy or has
+finished inserting records.
