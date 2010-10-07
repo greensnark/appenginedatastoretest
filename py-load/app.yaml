@@ -1,4 +1,4 @@
-application: devchat
+application: datastoretest
 version: 1
 runtime: python
 api_version: 1
@@ -8,4 +8,4 @@ handlers:
   static_dir: stylesheets
 
 - url: /.*
-  script: guestbook6_templates.py
+  script: test_load_query.py

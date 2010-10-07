@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+  </head>
+  <body>
+    <h1>Insert Performance (Python)</h1>
+
+    <p>Insert performance times with batch size: {{batch_size}},
+       trials: {{trials}}</p>
+
+    <table>
+      <tr>
+        <th>Average Time</th>
+        <td>{{timings.average}} ms</td>
+      </tr>
+      <tr>
+        <th>Max Time</th>
+        <td>{{timings.max}} ms</td>
+      </tr>
+      <tr>
+        <th>Min Time</th>
+        <td>{{timings.min}} ms</td>
+      </tr>
+      <tr>
+        <th>Std. Dev</th>
+        <td>{{timings.std_dev}} ms</td>
+      </tr>
+    </table>
+  </body>
+</html>
