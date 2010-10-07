@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import static com.google.appengine.api.datastore.FetchOptions.Builder.*;
 
 public class StoreTestServlet extends HttpServlet {
-  public void insertRecords(ArrayList<Entity> entities) {
+  public void insertRecords(int n, ArrayList<Entity> entities) {
     final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     final List<Key> keys = ds.put(entities);
-    //System.out.println("Got " + keys.size() + " keys after store");
+    System.out.println("Got " + keys.size() + " keys after store #" + n);
   }
 
   private ArrayList<Entity> createEntities(int batchSize) {
@@ -38,9 +38,10 @@ public class StoreTestServlet extends HttpServlet {
     Stopwatch watch = new Stopwatch();
     for (int i = 0; i < trials; ++i) {
       final ArrayList<Entity> entities = createEntities(batchSize);
+      final int n = i;
       watch.measureTime(new Runnable() {
           public void run() {
-            insertRecords(entities);
+            insertRecords(n, entities);
           }
         });
     }

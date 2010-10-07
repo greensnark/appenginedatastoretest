@@ -98,6 +98,7 @@ def create_entity():
   for f in MODEL_FIELDS:
     length = MODEL_FIELDS[f]
     e[f] = random_string(ALPHABETS, length)
+  e.set_unindexed_properties(MODEL_FIELDS.keys())
   return e
 
 # Query records and report times.

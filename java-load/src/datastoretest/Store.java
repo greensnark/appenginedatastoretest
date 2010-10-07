@@ -42,7 +42,7 @@ public class Store {
     final Entity e = new Entity(MODEL_CLASS);
     for (String key : MODEL_FIELDS.keySet()) {
       final int length = MODEL_FIELDS.get(key);
-      e.setProperty(key, generateField(length));
+      e.setUnindexedProperty(key, generateField(length));
     }
     return e;
   }
