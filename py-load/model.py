@@ -64,6 +64,7 @@ def insert_records(insert_size, n_times):
     status.inserted += insert_size
     status.pending -= insert_size
     if n_times > 1:
+      logging.info("Deferring further inserts (%d)" % (n_times - 1))
       deferred.defer(insert_records, insert_size, n_times - 1)
     else:
       status.status = ''
