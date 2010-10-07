@@ -30,7 +30,7 @@ MODEL_FIELDS = { 'firstname': 8,
                  'zip': 5 }
 
 INSERT_BATCH_SIZE = 500
-INSERT_TRIALS = 10
+INSERT_TRIALS = 4
 
 QUERY_BATCH_SIZE = 1000
 QUERY_TRIALS = 5
