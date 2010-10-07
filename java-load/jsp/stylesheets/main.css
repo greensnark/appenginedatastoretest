@@ -1,0 +1,9 @@
+body {
+  font-family: Verdana, Helvetica, sans-serif;
+  background-color: #fff;
+  padding: 10px 15px;
+}
+
+td, th {
+  text-align: left;
+}
