@@ -13,7 +13,6 @@ from datetime import datetime, timedelta
 import math
 
 ALPHABETS = "abcdefghijklmnopqrstuvwxyz"
-DIGITS = "0123456789"
 
 def random_string(charset, length):
   result = []
@@ -23,12 +22,12 @@ def random_string(charset, length):
   return "".join(result)
 
 MODEL_CLASS = 'Person'
-MODEL_FIELDS = { 'firstname': [ALPHABETS, 8],
-                 'lastname': [ALPHABETS, 8],
-                 'address': [ALPHABETS, 20],
-                 'city': [ALPHABETS, 10],
-                 'state': [ALPHABETS, 2],
-                 'zip': [DIGITS, 5] }
+MODEL_FIELDS = { 'firstname': 8
+                 'lastname': 8,
+                 'address': 20,
+                 'city': 10,
+                 'state': 2,
+                 'zip': 5 }
 
 INSERT_BATCH_SIZE = 500
 INSERT_TRIALS = 20
@@ -97,8 +96,8 @@ class Stopwatch(object):
 def create_entity():
   e = datastore.Entity(MODEL_CLASS)
   for f in MODEL_FIELDS:
-    charset, length = MODEL_FIELDS[f]
-    e[f] = random_string(charset, length)
+    length = MODEL_FIELDS[f]
+    e[f] = random_string(ALPHABETS, length)
   return e
 
 # Query records and report times.
@@ -126,6 +125,15 @@ def insert_timings(insert_size, n_times):
     with timer:
       datastore.Put(insert_batch)
   return timer
+
+def delete_entities():
+  while True:
+    q = datastore.Query(MODEL_CLASS)
+    objects = q.Get(500)
+    if not objects:
+      break
+    logging.info("Deleting %d objects of %s" % (len(objects), MODEL_CLASS))
+    datastore.Delete(objects)
 
 class BasePage(webapp.RequestHandler):
   def resolve_template(self, page):
@@ -157,9 +165,18 @@ class InsertPage(BasePage):
                      batch_size=INSERT_BATCH_SIZE,
                      trials=INSERT_TRIALS)
 
+class DeletePage(BasePage):
+  def post(self):
+    delete_entities()
+    self.response.out.write("Deleted entities from store")
+
+  def get(self):
+    return self.post()
+
 application = webapp.WSGIApplication([('/', MainPage),
                                       ('/query', QueryPage),
-                                      ('/insert', InsertPage)],
+                                      ('/insert', InsertPage),
+                                      ('/delete', DeletePage)],
                                      debug=False)
 
 def main():
