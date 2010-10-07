@@ -5,11 +5,21 @@
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
     <servlet>
-        <servlet-name>guestbook</servlet-name>
-        <servlet-class>guestbook.GuestbookServlet</servlet-class>
+        <servlet-name>storetest</servlet-name>
+        <servlet-class>datastoretest.StoreTestServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>querytest</servlet-name>
+        <servlet-class>datastoretest.QueryTestServlet</servlet-class>
+    </servlet>
+    
     <servlet-mapping>
-        <servlet-name>guestbook</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <servlet-name>storetest</servlet-name>
+        <url-pattern>/insert</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+      <servlet-name>querytest</servlet-name>
+      <url-pattern>/query</url-pattern>
     </servlet-mapping>
 </web-app>

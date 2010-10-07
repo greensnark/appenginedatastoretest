@@ -43,14 +43,12 @@
           description="Assemble the application directory">
     <mkdir dir="${war.dir}/WEB-INF"/>
     <mkdir dir="${war.dir}/WEB-INF/lib"/>
-    <!--
     <copy todir="${war.dir}">
-      <fileset dir="html">
+      <fileset dir="jsp">
         <exclude name="**/.svn/**"/>
         <exclude name="**/*~"/>
       </fileset>
     </copy>
-    -->
     <copy todir="${war.dir}/WEB-INF/lib">
       <fileset dir="lib">
         <include name="**/*.jar"/>
