@@ -35,6 +35,8 @@ public class QueryTestServlet extends HttpServlet {
     if (q.isKeysOnly())
       throw new RuntimeException("MOO");
     final PreparedQuery pq = ds.prepare(q);
+    // Force the query to run and return objects so we can be sure
+    // we've timed a full query.
     final List<Entity> entityList =
       new ArrayList<Entity>(pq.asList(withLimit(entityCount)));
     return entityList;
