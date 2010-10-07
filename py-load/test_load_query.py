@@ -5,32 +5,15 @@ import logging
 
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
-from google.appengine.ext import db
+from google.appengine.ext import db, deferred
 from google.appengine.ext.webapp import template
 from google.appengine.api import datastore
-from random import randrange
 from datetime import datetime, timedelta
 import math
+import model
 
-ALPHABETS = "abcdefghijklmnopqrstuvwxyz"
-
-def random_string(charset, length):
-  result = []
-  nchars = len(charset)
-  for i in range(length):
-    result.append(charset[randrange(0, nchars)])
-  return "".join(result)
-
-MODEL_CLASS = 'Person'
-MODEL_FIELDS = { 'firstname': 8,
-                 'lastname': 8,
-                 'address': 20,
-                 'city': 10,
-                 'state': 2,
-                 'zip': 5 }
-
-INSERT_BATCH_SIZE = 500
-INSERT_TRIALS = 4
+INSERT_BATCH_SIZE = 100
+INSERT_TRIALS = 20
 
 QUERY_BATCH_SIZE = 1000
 QUERY_TRIALS = 5
@@ -93,14 +76,6 @@ class Stopwatch(object):
       variance += delta * delta
     self._std_dev = math.sqrt(variance / len(self.times))
 
-def create_entity():
-  e = datastore.Entity(MODEL_CLASS)
-  for f in MODEL_FIELDS:
-    length = MODEL_FIELDS[f]
-    e[f] = random_string(ALPHABETS, length)
-  e.set_unindexed_properties(MODEL_FIELDS.keys())
-  return e
-
 # Query records and report times.
 def query_timings(fetch_size, n_times):
   timer = Stopwatch()
@@ -109,7 +84,7 @@ def query_timings(fetch_size, n_times):
     logging.info("Querying %d records (batch %d/%d)"
                  % (fetch_size, i + 1, n_times))
     with timer:
-      q = datastore.Query(MODEL_CLASS)
+      q = datastore.Query(model.MODEL_CLASS)
       objects = list(q.Get(fetch_size))
       nfetched += len(objects)
   return nfetched, timer
@@ -129,7 +104,7 @@ def insert_timings(insert_size, n_times):
 
 def delete_entities():
   while True:
-    q = datastore.Query(MODEL_CLASS)
+    q = datastore.Query(model.MODEL_CLASS)
     objects = q.Get(500)
     if not objects:
       break
@@ -160,11 +135,18 @@ class QueryPage(BasePage):
 
 class InsertPage(BasePage):
   def post(self):
-    timings = insert_timings(INSERT_BATCH_SIZE, INSERT_TRIALS)
-    self.render_page('insertstats.html',
-                     timings=timings,
-                     batch_size=INSERT_BATCH_SIZE,
-                     trials=INSERT_TRIALS)
+    model.insert_records(INSERT_BATCH_SIZE, INSERT_TRIALS)
+    self.redirect('/insert_status')
+
+class InsertStatusPage(BasePage):
+  def get(self):
+    status = model.InsertStatus.find_existing()
+    if not status or not status.status:
+      self.response.out.write("Insert status: not inserting")
+    else:
+      self.response.out.write("Insert status: %d inserted, %d pending (%s)"
+                              % (status.inserted, status.pending,
+                                 status.status))
 
 class DeletePage(BasePage):
   def post(self):
@@ -177,6 +159,7 @@ class DeletePage(BasePage):
 application = webapp.WSGIApplication([('/', MainPage),
                                       ('/query', QueryPage),
                                       ('/insert', InsertPage),
+                                      ('/insert_status', InsertStatusPage),
                                       ('/delete', DeletePage)],
                                      debug=False)
 

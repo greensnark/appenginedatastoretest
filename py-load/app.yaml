@@ -1,4 +1,4 @@
-application: snarkmap
+application: snarkdstest
 version: 2
 runtime: python
 api_version: 1
@@ -6,6 +6,10 @@ api_version: 1
 handlers:
 - url: /stylesheets
   static_dir: stylesheets
+
+- url: /_ah/queue/deferred
+  script: $PYTHON_LIB/google/appengine/ext/deferred/handler.py
+  login: admin
 
 - url: /.*
   script: test_load_query.py
