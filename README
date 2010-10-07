@@ -1,0 +1,55 @@
+Appengine Datastore Query Test
+------------------------------
+
+(See COPYING for license terms. This code is MIT-licensed.)
+
+This repository contains a barebones appengine Python app (py-load) to
+seed the datastore with 2000 records and then run a few queries of
+1000 records to measure query performance.
+
+The repository also includes a minimal appengine Java app (java-load)
+to query 1000 records (previously inserted by the Python app) and
+measure query performance.
+
+Query performance measures just a few (5) samples, so this is not
+statistically rigorous. It does serve to get a rough picture of
+relative performance.
+
+I focus primarily on query performance here because that's the number
+of interest to me. It's relatively easy to work around slow inserts
+and deletes; less easy to work around slow queries.
+
+
+Python app
+----------
+
+To try the Python app, edit app.yaml to point to an appengine app you
+own and use `appcfg.py update py-load` to upload it.
+
+
+Java app
+--------
+
+To try the Java app, edit build.xml and point it at your appengine
+Java SDK, edit WEB-INF/appengine-web.xml and point the application at
+the app you want to deploy to, then run `ant && appcfg.sh update war`
+
+
+Inserting Records
+-----------------
+
+The Python app's landing page has a button to insert 2k records of an
+entity that looks like this (no fields indexed):
+
+Person
+======
+firstname (length 8)
+lastname (length 8)
+address (20)
+city (10)
+state (2)
+zip (5)
+
+I recognize this is a toy model; the intent is merely to compare the
+relative performance of Java and Python for medium-large datastore
+queries.
