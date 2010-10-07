@@ -1,5 +1,5 @@
-application: datastoretest
-version: 1
+application: snarkmap
+version: 2
 runtime: python
 api_version: 1
 
