@@ -22,7 +22,7 @@ def random_string(charset, length):
   return "".join(result)
 
 MODEL_CLASS = 'Person'
-MODEL_FIELDS = { 'firstname': 8
+MODEL_FIELDS = { 'firstname': 8,
                  'lastname': 8,
                  'address': 20,
                  'city': 10,
