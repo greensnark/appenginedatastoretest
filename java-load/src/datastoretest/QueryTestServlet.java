@@ -67,11 +67,11 @@ public class QueryTestServlet extends HttpServlet {
   {
     final String queryCountString = req.getParameter("q");
     final int queryCount = parseInt(queryCountString,
-                                     Store.QUERY_BATCH_SIZE, 1, 100000);
+                                    Store.QUERY_BATCH_SIZE, 1, 100000);
 
     final String queryTrialsString = req.getParameter("qt");
     final int queryTrials = parseInt(queryTrialsString,
-                                      Store.QUERY_TRIALS, 1, 1000);
+                                     Store.QUERY_TRIALS, 1, 1000);
 
     final ArrayList<Integer> fetchSizes = new ArrayList<Integer>();
     Stopwatch watch = new Stopwatch();
@@ -86,10 +86,6 @@ public class QueryTestServlet extends HttpServlet {
     long totalFetchSize = 0L;
     for (int fetch : fetchSizes)
       totalFetchSize += fetch;
-
-    final long queryStartTime = System.currentTimeMillis();
-    final List<Entity> entities = runQuery(queryCount);
-    final long queryEndTime = System.currentTimeMillis();
 
     res.setContentType("text/plain");
     final PrintWriter writer = res.getWriter();
