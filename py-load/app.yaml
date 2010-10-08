@@ -7,6 +7,10 @@ handlers:
 - url: /stylesheets
   static_dir: stylesheets
 
+- url: /stats.*
+  script: $PYTHON_LIB/google/appengine/ext/appstats/ui.py
+  login: admin
+
 - url: /_ah/queue/deferred
   script: $PYTHON_LIB/google/appengine/ext/deferred/handler.py
   login: admin
