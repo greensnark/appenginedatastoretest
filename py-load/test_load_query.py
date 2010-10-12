@@ -105,7 +105,7 @@ def query_timings(fetch_size, n_times):
                  % (fetch_size, i + 1, n_times))
     with timer:
       q = datastore.Query(model.MODEL_CLASS)
-      objects = list(q.Get(fetch_size))
+      objects = q.Get(fetch_size)
       nfetched += len(objects)
   return nfetched, timer
 
